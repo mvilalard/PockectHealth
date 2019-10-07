@@ -39,6 +39,8 @@ public class VaccineActivity extends BaseActivity {
         vaccineListView.setAdapter(adapter);
         vaccineListView.setBackgroundResource(R.color.vaccine_main_color);
 
+        //test comment
+
     }
 
 }
