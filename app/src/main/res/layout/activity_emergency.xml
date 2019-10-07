@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.EmergencyActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:minHeight="75dp"
+        android:background="@color/emergency_main_color"
+        android:textAlignment="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="5dp"
+        >
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/emergency_title"
+            android:textColor="@color/emergency_titlebar_text_color"
+            android:textSize="32sp"
+            android:layout_gravity="center"
+            android:id="@+id/toolbar_title" />
+
+    </android.support.v7.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:orientation="vertical"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginVertical="15dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:columnWidth="120dp"
+            android:layout_marginHorizontal="2dp">
+
+            <Button
+                android:id="@+id/emergency_112"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:background="@drawable/circle_emergency_button"
+                android:drawableTop="@android:drawable/ic_menu_call"
+                android:paddingTop="20dp"
+                android:layout_margin="2dp"
+                android:text="@string/_112"
+                android:textSize="32sp"
+                android:textColor="#fff"
+                />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/emergency_18"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:background="@drawable/circle_emergency_button"
+                android:drawableTop="@android:drawable/ic_menu_call"
+                android:paddingTop="20dp"
+                android:layout_margin="2dp"
+                android:text="@string/_18"
+                android:textSize="32sp"
+                android:textColor="#fff"
+                android:elevation="5dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:columnWidth="120dp"
+            android:layout_marginHorizontal="2dp">
+
+            <Button
+                android:id="@+id/emergency_15"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:background="@drawable/circle_emergency_button"
+                android:drawableTop="@android:drawable/ic_menu_call"
+                android:paddingTop="20dp"
+                android:layout_margin="2dp"
+                android:text="@string/_15"
+                android:textSize="32sp"
+                android:textColor="#fff"
+                android:elevation="5dp"/>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/emergency_doctor"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_margin="2dp"
+                android:background="@drawable/circle_emergency_button"
+                android:text="@string/_medecin"
+                android:drawableTop="@android:drawable/ic_menu_call"
+                android:paddingTop="20dp"
+                android:textColor="#fff"
+                android:elevation="5dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:columnWidth="120dp"
+            android:layout_marginHorizontal="2dp">
+
+            <Button
+                android:id="@+id/emergency_SOS"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_margin="2dp"
+                android:background="@drawable/circle_emergency_button"
+                android:drawableTop="@android:drawable/ic_menu_call"
+                android:paddingTop="20dp"
+                android:text="@string/_sos"
+                android:textColor="#fff"
+                android:elevation="5dp" />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/emergency_pharmacy"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_margin="2dp"
+                android:background="@drawable/circle_emergency_button"
+                android:drawableTop="@android:drawable/ic_menu_call"
+                android:paddingTop="20dp"
+                android:text="@string/_garde"
+                android:textColor="#fff"
+                android:elevation="5dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:columnWidth="120dp"
+            android:layout_marginHorizontal="2dp">
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/emergency_proche"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_margin="2dp"
+                android:background="@drawable/circle_emergency_button"
+                android:drawableTop="@android:drawable/ic_menu_call"
+                android:paddingTop="20dp"
+                android:text="@string/_proche"
+                android:textColor="#fff"
+                android:elevation="5dp" />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</RelativeLayout>

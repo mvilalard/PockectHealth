@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.MainMenuActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:minHeight="75dp"
+        android:background="@color/main_menu_main_color"
+        android:textAlignment="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/main_menu_action_bar_title"
+            android:textColor="@color/main_menu_titlebar_text_color"
+            android:textSize="32sp" />
+
+    </android.support.v7.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:orientation="vertical"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginVertical="30dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:columnWidth="120dp"
+            android:orientation="horizontal"
+            android:layout_marginHorizontal="2dp">
+
+            <LinearLayout
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/rendez_vous_button"
+                    android:padding="20dp"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/circle"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/calendar" >
+                </ImageButton>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:clickable="false"
+                    android:text="@string/rendez_vous"
+                    android:textAllCaps="true"
+                    android:textColor="#000" >
+                </TextView>
+            </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/ordonnance_button"
+                    android:padding="25dp"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/circle"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ordinance" >
+                </ImageButton>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:clickable="false"
+                    android:text="@string/ordonnances"
+                    android:textAllCaps="true"
+                    android:textColor="#000" >
+                </TextView>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:columnWidth="120dp"
+            android:layout_marginHorizontal="2dp"
+            android:layout_marginTop="5dp">
+
+            <LinearLayout
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/graph_button"
+                    android:padding="25dp"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/circle_graph_button"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/graph" >
+                </ImageButton>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:clickable="false"
+                    android:text="Courbes"
+                    android:textAllCaps="true"
+                    android:textColor="#000"></TextView>
+            </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/vaccine_history_button"
+                    android:padding="25dp"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/circle_vaccine_button"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/vaccine" >
+                </ImageButton>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:clickable="false"
+                    android:text="Vaccins"
+                    android:textAllCaps="true"
+                    android:textColor="#000"></TextView>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:columnWidth="120dp"
+            android:layout_marginHorizontal="2dp"
+            android:layout_marginTop="5dp">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/emergency_button"
+                    android:padding="15dp"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/circle_emergency_button"
+                    android:scaleType="fitXY"
+                    android:src="@android:drawable/ic_menu_call" >
+                </ImageButton>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:clickable="false"
+                    android:text="@string/urgences"
+                    android:textAllCaps="true"
+                    android:textColor="#000" >
+                </TextView>
+            </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

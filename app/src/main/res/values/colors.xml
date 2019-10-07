@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#FFFFFF</color>
+    <color name="colorPrimaryDark">#D3D3D3</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="main_menu_main_color">#B3BCF1</color>
+    <color name="main_menu_main_color_dark">#5B70EE</color>
+    <color name="main_menu_titlebar_text_color">#000000</color>
+    <color name="rendez_vous_main_color">#85DD88</color>
+    <color name="rendez_vous_main_color_dark">#4E8A50</color>
+    <color name="rendez_vous_titlebar_text_color">#000000</color>
+    <color name="rendez_vous_row_background">#CAF0D1</color>
+    <color name="vaccine_main_color">#B3BCF1</color>
+    <color name="vaccine_main_color_dark">#5B70EE</color>
+    <color name="vaccine_titlebar_text_color">#000000</color>
+    <color name="vaccine_row_background">#B3BCF1</color>
+    <color name="ordonnance_main_color">#85DD88</color>
+    <color name="ordonnance_main_color_dark">#4E8A50</color>
+    <color name="ordonnance_titlebar_text_color">#000000</color>
+    <color name="ordonnance_row_background">#CAF0D1</color>
+    <color name="emergency_main_color">#E91E63</color>
+    <color name="emergency_main_color_dark">#861138</color>
+    <color name="emergency_titlebar_text_color">#FFFFFF</color>
+    <color name="emergency_button_background_color">#FFFFFF</color>
+    <color name="emergency_button_border_color">#E91E63</color>
+    <color name="personnal_main_color">#FCF192</color>
+    <color name="personnal_main_color_dark">#A29634</color>x²
+    <color name="personnal_titlebar_text_color">#FFFFFF</color>
+    <color name="personnal_button_background_color">#FFFFFF</color>
+</resources>

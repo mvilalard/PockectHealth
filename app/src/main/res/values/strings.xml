@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">PocketHealth</string>
+    <string name="main_menu_action_bar_title">Pocket Health</string>
+    <string name="rendez_vous_action_bar_title">Rendez-vous</string>
+    <string name="emergency_title">Urgences</string>
+    <string name="title_activity_ordonnance">Ordonnances</string>
+    <string name="suivi_personnel">Suivi Personnel</string>
+    <string name="urgences">Urgences</string>
+    <string name="rendez_vous">Rendez-vous</string>
+    <string name="ordonnances">Ordonnances</string>
+    <string name="_112">112</string>
+    <string name="_15">15</string>
+    <string name="_18">18</string>
+    <string name="_medecin">Médecin traitant</string>
+    <string name="_sos">SOS Médecin</string>
+    <string name="_garde">Pharmacie de garde</string>
+    <string name="_proche">Proche</string>
+    <string name="title_activity_graph">Courbes poids/taille</string>
+    <string name="title_activity_calendar">Calendrier</string>
+    <string name="title_activity_vaccine">VaccineActivity</string>
+    <string name="historique_vaccins">Historique Vaccins</string>
+</resources>
