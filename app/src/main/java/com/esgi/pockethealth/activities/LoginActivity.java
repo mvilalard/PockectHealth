@@ -181,7 +181,7 @@ public class LoginActivity extends BaseActivity {
                     user.setSocial_security_number(userObj.getString("social_security_number"));
                     user.setBirthday(format.parse(userObj.getString("birthdate")));
 
-                    Toast.makeText(getApplicationContext(),user.getName(),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),user.getBirthday().toString(),Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 } catch (ParseException e) {
