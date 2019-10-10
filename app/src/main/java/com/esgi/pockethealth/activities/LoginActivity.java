@@ -262,7 +262,7 @@ public class LoginActivity extends BaseActivity {
                             res = new JSONArray(response);
                             for(int i = 0; i < res.length(); i++) {
                                 JSONObject currentObj = res.getJSONObject(i);
-                                weightsValues.add(new Height(i, currentObj.getLong("weights"),
+                                weightsValues.add(new Weight(i, currentObj.getLong("weights"),
                                         format.parse(currentObj.getString("date"))));
                             }
                             user.setWeights(weightsValues);
