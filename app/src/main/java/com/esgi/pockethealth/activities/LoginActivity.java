@@ -30,6 +30,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,12 +54,14 @@ public class LoginActivity extends BaseActivity {
                     login();
                 } catch (JSONException e) {
                     e.printStackTrace();
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
             }
         });
     }
 
-    public void login() throws JSONException {
+    public void login() throws JSONException, ParseException {
         final Button loginButton = (Button) findViewById(R.id.btn_login);
 
         checkPermissions();
@@ -72,7 +76,6 @@ public class LoginActivity extends BaseActivity {
         final String username = usernameText.getText().toString();
         final EditText passwordText = findViewById(R.id.input_password);
         final String password = passwordText.getText().toString();
-
         /*RequestQueue ExampleRequestQueue = Volley.newRequestQueue(this);
 
         String url = "http://192.168.1.33:5000/connection/"+username+"/"+password;
@@ -158,10 +161,19 @@ public class LoginActivity extends BaseActivity {
         moveTaskToBack(true);
     }
 
-    public void populateUser(int id){
+    public void populateUser(int id) throws JSONException, ParseException {
         user = new Patient();
         user.setId(id);
 
-        
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+        getResponse("http://192.168.1.33:5000/patient/"+id);
+        JSONObject userObj = res.getJSONObject(0);
+        user.setName(userObj.getString("name"));
+        user.setForename(userObj.getString("forename"));
+        user.setBlood_group(userObj.getString("bloodgroup"));
+        user.setSocial_security_number(userObj.getString("social_security_number"));
+        user.setBirthday(format.parse(userObj.getString("birthdate")));
     }
+
 }
