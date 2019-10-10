@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,7 +21,16 @@ import com.esgi.pockethealth.models.Patient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 import java.util.HashMap;
+import java.util.Map;
+
 
 public class LoginActivity extends BaseActivity {
 
@@ -54,43 +64,28 @@ public class LoginActivity extends BaseActivity {
         final EditText passwordText = findViewById(R.id.input_password);
         final String password = passwordText.getText().toString();
 
-        // TODO : Login api call to change logged state
-        final HashMap<String, String> params = new HashMap<>();
-        params.put("username", username);
-        params.put("password", password);
+        RequestQueue ExampleRequestQueue = Volley.newRequestQueue(this);
 
-        final JSONObject[] response = {new JSONObject()};
-        Thread postTask = new Thread(new Runnable() {
+        String url = "http://192.168.1.33:5000/patient/1";
+        StringRequest ExampleStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
-            public void run() {
-                String url = "/android/login/patient/" + username + "/" + password;
-                response[0] = RequestManager.executeHttpsRequest(
-                        RequestManager.RequestType.POST, url, null);
+            public void onResponse(String response) {
+                //This code is executed if the server responds, whether or not the response contains data.
+                //The String 'response' contains the server's response.
+                //You can test it by printing response.substring(0,500) to the screen.
+
+                progressDialog.setMessage(response);
+                progressDialog.show();
+            }
+        }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //This code is executed if there is an error.
             }
         });
-        postTask.start();
-        while (postTask.isAlive());
 
-        boolean logged = true;
+        ExampleRequestQueue.add(ExampleStringRequest);
 
-        if(response[0] != null) {
-            JSONObject responseObject = response[0];
-            try {
-                responseObject.getString("error");
-            } catch (JSONException e) {
-                logged = true;
-            }
-        }
-        if(logged){
-            Intent loginIntent = new Intent();
-
-            startActivity(new Intent(getApplicationContext(), MainMenuActivity.class));
-        } else {
-            Toast.makeText(getBaseContext(), "Échec de l'authentification", Toast.LENGTH_LONG).show();
-            loginButton.setEnabled(true);
-            progressDialog.dismiss();
-        }
-        return;
     }
 
     public void checkPermissions() {

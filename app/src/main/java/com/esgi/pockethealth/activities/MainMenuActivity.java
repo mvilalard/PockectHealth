@@ -31,6 +31,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import java.lang.Object;
+
 public class MainMenuActivity extends BaseActivity {
 
     @Override
@@ -102,6 +104,7 @@ public class MainMenuActivity extends BaseActivity {
     public void createUser(){
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         try {
+
             //Données test
             Doctor doctor1 = new Doctor(0, new UserAccount(0, "salut",
                     "azerty", "doctor@doc.fr"), "James", "Wilson",
