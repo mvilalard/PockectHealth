@@ -16,7 +16,9 @@ import android.widget.Toast;
 
 import com.esgi.pockethealth.R;
 import com.esgi.pockethealth.application.BaseActivity;
+import com.esgi.pockethealth.application.IData;
 import com.esgi.pockethealth.application.RequestManager;
+import com.esgi.pockethealth.models.Height;
 import com.esgi.pockethealth.models.Patient;
 
 import org.json.JSONArray;
@@ -32,6 +34,7 @@ import com.android.volley.toolbox.Volley;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -93,6 +96,7 @@ public class LoginActivity extends BaseActivity {
                         user.setId(res.getJSONObject(0).getInt("patientID"));
                         progressDialog.setMessage("connected as "+user.getId());
                         populateUser(user.getId());
+                        populateHeights();
                         startActivity(new Intent(getApplicationContext(), MainMenuActivity.class));
 
                     }
@@ -199,6 +203,42 @@ public class LoginActivity extends BaseActivity {
 
         requestQueue.add(stringRequest);
 
+    }
+
+    public void populateHeights()
+    {
+        final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+        RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                "http://192.168.1.33:5000/patient/"+user.getId()+"/heights",
+                new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    ArrayList<IData> heightsValues = new ArrayList<>();
+                    res = new JSONArray(response);
+                    for(int i = 0; i < res.length(); i++) {
+                        JSONObject currentObj = res.getJSONObject(i);
+                        heightsValues.add(new Height(i, currentObj.getLong("Height"),
+                                format.parse(currentObj.getString("date"))));
+                    }
+                    user.setHeights(heightsValues);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        requestQueue.add(stringRequest);
     }
 
 }
