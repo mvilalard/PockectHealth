@@ -26,6 +26,10 @@ public class Doctor implements Serializable {
         this.number_rpps = number_rpps;
     }
 
+    public Doctor() {
+
+    }
+
     public int getId() {
         return id;
     }

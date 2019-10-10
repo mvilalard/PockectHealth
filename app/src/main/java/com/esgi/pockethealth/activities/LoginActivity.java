@@ -18,6 +18,8 @@ import com.esgi.pockethealth.R;
 import com.esgi.pockethealth.application.BaseActivity;
 import com.esgi.pockethealth.application.IData;
 import com.esgi.pockethealth.application.RequestManager;
+import com.esgi.pockethealth.models.Appointment;
+import com.esgi.pockethealth.models.Doctor;
 import com.esgi.pockethealth.models.Height;
 import com.esgi.pockethealth.models.Patient;
 
@@ -31,6 +33,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.esgi.pockethealth.models.Weight;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -97,6 +100,8 @@ public class LoginActivity extends BaseActivity {
                         progressDialog.setMessage("connected as "+user.getId());
                         populateUser(user.getId());
                         populateHeights();
+                        populateWeights();
+                        populateAppointments();
                         startActivity(new Intent(getApplicationContext(), MainMenuActivity.class));
 
                     }
@@ -239,6 +244,118 @@ public class LoginActivity extends BaseActivity {
             }
         });
         requestQueue.add(stringRequest);
+    }
+
+    public void populateWeights()
+    {
+        final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+        RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                "http://192.168.1.33:5000/patient/"+user.getId()+"/weights",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            ArrayList<IData> weightsValues = new ArrayList<>();
+                            res = new JSONArray(response);
+                            for(int i = 0; i < res.length(); i++) {
+                                JSONObject currentObj = res.getJSONObject(i);
+                                weightsValues.add(new Height(i, currentObj.getLong("weights"),
+                                        format.parse(currentObj.getString("date"))));
+                            }
+                            user.setWeights(weightsValues);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        requestQueue.add(stringRequest);
+    }
+
+    public void populateAppointments()
+    {
+        final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+        RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                "http://192.168.1.33:5000/patient/"+user.getId()+"/appointment",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            ArrayList<Appointment> appointmentsValues = new ArrayList<>();
+                            res = new JSONArray(response);
+                            for(int i = 0; i < res.length(); i++) {
+                                JSONObject currentObj = res.getJSONObject(i);
+                                appointmentsValues.add(new Appointment(i,
+                                        getDoctorById(currentObj.getInt("doctorID")),
+                                        format.parse(currentObj.getString("date")),
+                                        currentObj.getInt("duration")));
+                            }
+                            user.setAppointments(appointmentsValues);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        requestQueue.add(stringRequest);
+    }
+
+    public Doctor getDoctorById(final int id)
+    {
+        final Doctor toReturn = new Doctor();
+        final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+        RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                "http://192.168.1.33:5000/doctor/"+id,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        JSONObject doctorObj = null;
+                        try {
+                            res = new JSONArray(response);
+                            doctorObj = res.getJSONObject(0);
+                            toReturn.setId(id);
+                            toReturn.setName(doctorObj.getString("name"));
+                            toReturn.setForename(doctorObj.getString("forename"));
+                            toReturn.setAddress(doctorObj.getString("address"));
+                            toReturn.setTelephone(doctorObj.getString("telephone"));
+                            toReturn.setSpeciality(doctorObj.getString("speciality"));
+                            toReturn.setNumber_rpps(doctorObj.getString("number_rpps"));
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        requestQueue.add(stringRequest);
+        return toReturn;
     }
 
 }
