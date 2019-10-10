@@ -40,6 +40,7 @@ public class LoginActivity extends BaseActivity {
 
 
     static JSONArray res = null;
+    static boolean connected = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -76,52 +77,41 @@ public class LoginActivity extends BaseActivity {
         final String username = usernameText.getText().toString();
         final EditText passwordText = findViewById(R.id.input_password);
         final String password = passwordText.getText().toString();
-        /*RequestQueue ExampleRequestQueue = Volley.newRequestQueue(this);
 
-        String url = "http://192.168.1.33:5000/connection/"+username+"/"+password;
-        StringRequest ExampleStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+
+
+        user = new Patient();
+
+        RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://192.168.1.33:5000/connection/"+username+"/"+password, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
-                    JSONArray obj = new JSONArray(response);
-                    //TESTER SI RESPONSE EST NULL//
-                    progressDialog.setMessage("connected as "+obj.getJSONObject(0).getInt("patientID"));
-                    startActivity(new Intent(getApplicationContext(), MainMenuActivity.class));
+                    res = new JSONArray(response);
+                    if (res != null && res .length()>0){
+                        user.setId(res.getJSONObject(0).getInt("patientID"));
+                        progressDialog.setMessage("connected as "+user.getId());
+                        populateUser(user.getId());
+                        startActivity(new Intent(getApplicationContext(), MainMenuActivity.class));
 
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
-
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                progressDialog.setMessage("not connected");
+
             }
         });
 
-        ExampleRequestQueue.add(ExampleStringRequest);*/
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                getResponse("http://192.168.1.33:5000/connection/"+username+"/"+password);
-                if (res != null && res .length()>0){
-                    try {
-                        int id = res.getJSONObject(0).getInt("patientID");
-                        progressDialog.setMessage("connected as "+id);
-                        populateUser(id);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                }
-                else
-                    Toast.makeText(LoginActivity.this, "Mauvais nom de compte+mdp", Toast.LENGTH_SHORT).show();
-            }
-        });
-        thread.run();
-        while (thread.isAlive());
+
+        requestQueue.add(stringRequest);
+
     }
 
     public void checkPermissions() {
@@ -173,18 +163,42 @@ public class LoginActivity extends BaseActivity {
     }
 
     public void populateUser(int id) throws JSONException, ParseException {
-        user = new Patient();
-        user.setId(id);
 
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
-        getResponse("http://192.168.1.33:5000/patient/"+id);
-        JSONObject userObj = res.getJSONObject(0);
-        user.setName(userObj.getString("name"));
-        user.setForename(userObj.getString("forename"));
-        user.setBlood_group(userObj.getString("bloodgroup"));
-        user.setSocial_security_number(userObj.getString("social_security_number"));
-        user.setBirthday(format.parse(userObj.getString("birthdate")));
+        RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://192.168.1.33:5000/patient/"+id, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                JSONObject userObj = null;
+                try {
+                    res = new JSONArray(response);
+                    userObj = res.getJSONObject(0);
+                    user.setName(userObj.getString("name"));
+                    user.setForename(userObj.getString("forename"));
+                    user.setBlood_group(userObj.getString("bloodgroup"));
+                    user.setSocial_security_number(userObj.getString("social_security_number"));
+                    user.setBirthday(format.parse(userObj.getString("birthdate")));
+
+                    Toast.makeText(getApplicationContext(),user.getName(),Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+
+        requestQueue.add(stringRequest);
+
     }
 
 }
