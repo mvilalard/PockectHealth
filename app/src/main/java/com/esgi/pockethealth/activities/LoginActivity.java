@@ -184,6 +184,8 @@ public class LoginActivity extends BaseActivity {
                     user.setBlood_group(userObj.getString("bloodgroup"));
                     user.setSocial_security_number(userObj.getString("social_security_number"));
                     user.setBirthday(format.parse(userObj.getString("birthdate")));
+                    if (userObj.getString("organ_donor") == "Y") user.setOrgan_donor(true);
+                    else user.setOrgan_donor(false);
 
                     Toast.makeText(getApplicationContext(),user.getBirthday().toString(),Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {

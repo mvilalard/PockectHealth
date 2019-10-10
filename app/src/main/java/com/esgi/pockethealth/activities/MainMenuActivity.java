@@ -185,10 +185,14 @@ public class MainMenuActivity extends BaseActivity {
                     "dopidot@youtube.com");
 
 
-            user = new Patient(0, "Mickael", "Moreira",
+            /*user = new Patient(0, "Mickael", "Moreira",
                     format.parse("1996-12-01"), "O+",
                     "1234567891234", true,
-                    weights, heights, recalls, appointments, ordinances);
+                    weights, heights, recalls, appointments, ordinances);*/
+            user.setWeights(weights);
+            user.setAppointments(appointments);
+            user.setOrdinances(ordinances);
+            user.setRecalls(recalls);
 
         } catch (ParseException e) {
             e.printStackTrace();
