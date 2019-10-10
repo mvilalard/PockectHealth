@@ -66,21 +66,21 @@ public class LoginActivity extends BaseActivity {
 
         RequestQueue ExampleRequestQueue = Volley.newRequestQueue(this);
 
-        String url = "http://192.168.1.33:5000/patient/1";
+        String url = "http://192.168.1.33:5000/connection/"+username+"/"+password;
         StringRequest ExampleStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 //This code is executed if the server responds, whether or not the response contains data.
                 //The String 'response' contains the server's response.
                 //You can test it by printing response.substring(0,500) to the screen.
+                progressDialog.setMessage("connected as ID:"+response);
 
-                progressDialog.setMessage(response);
-                progressDialog.show();
             }
         }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
             @Override
             public void onErrorResponse(VolleyError error) {
                 //This code is executed if there is an error.
+                progressDialog.setMessage("not connected");
             }
         });
 
