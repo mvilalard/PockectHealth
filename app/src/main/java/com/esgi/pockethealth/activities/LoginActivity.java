@@ -106,8 +106,10 @@ public class LoginActivity extends BaseActivity {
         getResponse("http://192.168.1.33:5000/connection/"+username+"/"+password);
         if (res != null){
             int id = res.getJSONObject(0).getInt("patientID");
-            progressDialog.setMessage("connected as "+id);
+            progressDialog.setMessage("connected as "+user.getName());
             populateUser(id);
+
+
         }
 
 
