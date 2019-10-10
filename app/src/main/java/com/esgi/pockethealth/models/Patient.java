@@ -42,6 +42,8 @@ public class Patient implements Serializable {
         this.ordinances = ordinances;
     }
 
+    public Patient(){}
+
     public int getId() {
         return id;
     }

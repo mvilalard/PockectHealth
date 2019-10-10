@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.JsonReader;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +19,7 @@ import com.esgi.pockethealth.application.BaseActivity;
 import com.esgi.pockethealth.application.RequestManager;
 import com.esgi.pockethealth.models.Patient;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -34,6 +36,9 @@ import java.util.Map;
 
 public class LoginActivity extends BaseActivity {
 
+
+    static JSONArray res = null;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,12 +48,16 @@ public class LoginActivity extends BaseActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                login();
+                try {
+                    login();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
 
-    public void login() {
+    public void login() throws JSONException {
         final Button loginButton = (Button) findViewById(R.id.btn_login);
 
         checkPermissions();
@@ -64,19 +73,23 @@ public class LoginActivity extends BaseActivity {
         final EditText passwordText = findViewById(R.id.input_password);
         final String password = passwordText.getText().toString();
 
-        RequestQueue ExampleRequestQueue = Volley.newRequestQueue(this);
+        /*RequestQueue ExampleRequestQueue = Volley.newRequestQueue(this);
 
         String url = "http://192.168.1.33:5000/connection/"+username+"/"+password;
         StringRequest ExampleStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
-                    String ID = new JSONObject(response).toString();
+                    JSONArray obj = new JSONArray(response);
+                    //TESTER SI RESPONSE EST NULL//
+                    progressDialog.setMessage("connected as "+obj.getJSONObject(0).getInt("patientID"));
+                    startActivity(new Intent(getApplicationContext(), MainMenuActivity.class));
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                progressDialog.setMessage("connected");
-                //startActivity(new Intent(getApplicationContext(), MainMenuActivity.class));
+
+
 
             }
         }, new Response.ErrorListener() {
@@ -86,7 +99,14 @@ public class LoginActivity extends BaseActivity {
             }
         });
 
-        ExampleRequestQueue.add(ExampleStringRequest);
+        ExampleRequestQueue.add(ExampleStringRequest);*/
+        getResponse("http://192.168.1.33:5000/connection/"+username+"/"+password);
+        if (res != null){
+            int id = res.getJSONObject(0).getInt("patientID");
+            progressDialog.setMessage("connected as "+id);
+            populateUser(id);
+        }
+
 
     }
 
@@ -105,11 +125,43 @@ public class LoginActivity extends BaseActivity {
                     new String[]{Manifest.permission.ACCESS_NETWORK_STATE},
                     1);
         }
+
+
+    }
+
+    public void getResponse(String url){
+
+        RequestQueue ExampleRequestQueue = Volley.newRequestQueue(this);
+
+        StringRequest ExampleStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    res = new JSONArray(response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+        ExampleRequestQueue.add(ExampleStringRequest);
     }
 
     @Override
     public void onBackPressed() {
         // disable going back to the MainActivity
         moveTaskToBack(true);
+    }
+
+    public void populateUser(int id){
+        user = new Patient();
+        user.setId(id);
+
+        
     }
 }
