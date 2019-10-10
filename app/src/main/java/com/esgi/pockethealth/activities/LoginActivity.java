@@ -92,8 +92,6 @@ public class LoginActivity extends BaseActivity {
                     e.printStackTrace();
                 }
 
-
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -103,16 +101,27 @@ public class LoginActivity extends BaseActivity {
         });
 
         ExampleRequestQueue.add(ExampleStringRequest);*/
-        getResponse("http://192.168.1.33:5000/connection/"+username+"/"+password);
-        if (res != null){
-            int id = res.getJSONObject(0).getInt("patientID");
-            progressDialog.setMessage("connected as "+user.getName());
-            populateUser(id);
-
-
-        }
-
-
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                getResponse("http://192.168.1.33:5000/connection/"+username+"/"+password);
+                if (res != null && res .length()>0){
+                    try {
+                        int id = res.getJSONObject(0).getInt("patientID");
+                        progressDialog.setMessage("connected as "+id);
+                        populateUser(id);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else
+                    Toast.makeText(LoginActivity.this, "Mauvais nom de compte+mdp", Toast.LENGTH_SHORT).show();
+            }
+        });
+        thread.run();
+        while (thread.isAlive());
     }
 
     public void checkPermissions() {
@@ -134,9 +143,9 @@ public class LoginActivity extends BaseActivity {
 
     }
 
-    public void getResponse(String url){
+    public void getResponse(final String url){
 
-        RequestQueue ExampleRequestQueue = Volley.newRequestQueue(this);
+        RequestQueue ExampleRequestQueue = Volley.newRequestQueue(LoginActivity.this);
 
         StringRequest ExampleStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
