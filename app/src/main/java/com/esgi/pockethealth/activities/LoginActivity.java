@@ -70,16 +70,18 @@ public class LoginActivity extends BaseActivity {
         StringRequest ExampleStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                //This code is executed if the server responds, whether or not the response contains data.
-                //The String 'response' contains the server's response.
-                //You can test it by printing response.substring(0,500) to the screen.
-                progressDialog.setMessage("connected as ID:"+response);
+                try {
+                    String ID = new JSONObject(response).toString();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                progressDialog.setMessage("connected");
+                //startActivity(new Intent(getApplicationContext(), MainMenuActivity.class));
 
             }
-        }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
+        }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                //This code is executed if there is an error.
                 progressDialog.setMessage("not connected");
             }
         });
