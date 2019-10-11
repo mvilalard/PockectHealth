@@ -47,7 +47,7 @@ public class LoginActivity extends BaseActivity {
 
 
     static JSONArray res = null;
-    static boolean connected = false;
+    static ArrayList<Doctor> doctors = new ArrayList<Doctor>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -294,7 +294,7 @@ public class LoginActivity extends BaseActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                "http://192.168.1.33:5000/patient/"+user.getId()+"/appointment",
+                "http://192.168.1.33:5000/patient/%22+user.getId()+%22/appointment",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -307,8 +307,6 @@ public class LoginActivity extends BaseActivity {
                                 SimpleDateFormat output = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                                 Date d = sdf.parse(currentObj.getString("date").replace(".000Z", ""));
                                 String formattedTime = output.format(d);
-
-
                                 appointmentsValues.add(new Appointment(i,
                                         null,
                                         output.parse(formattedTime),
@@ -372,6 +370,43 @@ public class LoginActivity extends BaseActivity {
         });
         requestQueue.add(stringRequest);
         return toReturn;
+    }
+
+    public void populateDoctor(){
+        RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                "http://192.168.1.33:5000/doctor/",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            res = new JSONArray(response);
+                            for(int i = 0; i < res.length(); i++) {
+                                JSONObject currentObj = res.getJSONObject(i);
+                                Doctor doc = new Doctor();
+                                doc.setId(currentObj.getInt("doctorID"));
+                                doc.setName(currentObj.getString("name"));
+                                doc.setForename(currentObj.getString("forename"));
+                                doc.setAddress(currentObj.getString("address"));
+                                doc.setTelephone(currentObj.getString("telephone"));
+                                doc.setSpeciality(currentObj.getString("speciality"));
+                                doc.setNumber_rpps(currentObj.getString("number_rpps"));
+
+                                doctors.add(doc);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        requestQueue.add(stringRequest);
     }
 
 }
