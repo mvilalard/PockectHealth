@@ -191,7 +191,7 @@ public class MainMenuActivity extends BaseActivity {
                     weights, heights, recalls, appointments, ordinances);*/
             //user.setHeights(heights);
             //user.setWeights(weights);
-            //user.setAppointments(appointments);
+            user.setAppointments(appointments);
             user.setOrdinances(ordinances);
             user.setRecalls(recalls);
 

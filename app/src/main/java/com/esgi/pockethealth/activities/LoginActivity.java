@@ -102,7 +102,9 @@ public class LoginActivity extends BaseActivity {
                         populateUser(user.getId());
                         populateHeights();
                         populateWeights();
-                        populateAppointments();
+                        populateDoctor();
+                        Toast.makeText(getApplicationContext(),doctors.get(0).getName(),Toast.LENGTH_SHORT).show();
+                        //populateAppointments();
                         startActivity(new Intent(getApplicationContext(), MainMenuActivity.class));
 
                     }
