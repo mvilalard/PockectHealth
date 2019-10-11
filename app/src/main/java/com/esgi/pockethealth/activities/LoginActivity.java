@@ -38,6 +38,7 @@ import com.esgi.pockethealth.models.Weight;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -286,7 +287,7 @@ public class LoginActivity extends BaseActivity {
 
     public void populateAppointments()
     {
-        final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         final ArrayList<Appointment> appointmentsValues = new ArrayList<>();
         final ArrayList<Integer> doctorIds = new ArrayList<>();
 
@@ -301,9 +302,16 @@ public class LoginActivity extends BaseActivity {
                             res = new JSONArray(response);
                             for(int i = 0; i < res.length(); i++) {
                                 JSONObject currentObj = res.getJSONObject(i);
+
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                                SimpleDateFormat output = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                Date d = sdf.parse(currentObj.getString("date"));
+                                String formattedTime = output.format(d);
+
+
                                 appointmentsValues.add(new Appointment(i,
                                         null,
-                                        format.parse(currentObj.getString("date")),
+                                        output.parse(formattedTime),
                                         currentObj.getInt("duration")));
                                 doctorIds.add(currentObj.getInt("doctorID"));
                             }
@@ -326,6 +334,7 @@ public class LoginActivity extends BaseActivity {
         for(int i = 0; i < appointmentsValues.size(); i++) {
             Appointment currentObj = appointmentsValues.get(i);
             currentObj.setDoctor(getDoctorById(doctorIds.get(i)));
+            Toast.makeText(getApplicationContext(),currentObj.getCreation_date().toString(),Toast.LENGTH_SHORT).show();
         }
 
         user.setAppointments(appointmentsValues);
@@ -354,7 +363,6 @@ public class LoginActivity extends BaseActivity {
                             toReturn.setTelephone(doctorObj.getString("telephone"));
                             toReturn.setSpeciality(doctorObj.getString("speciality"));
                             toReturn.setNumber_rpps(doctorObj.getString("number_rpps"));
-                            Toast.makeText(getApplicationContext(),toReturn.getSpeciality(),Toast.LENGTH_SHORT).show();
 
                         } catch (JSONException e) {
                             e.printStackTrace();
