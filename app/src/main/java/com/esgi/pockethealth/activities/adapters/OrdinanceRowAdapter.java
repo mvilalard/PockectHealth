@@ -55,6 +55,7 @@ public class OrdinanceRowAdapter extends BaseAdapter {
         Date creationDate = currentOrdinance.getDate_creation();// the date instance
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(creationDate);
+        calendar.add(Calendar.MONTH, 1);
 
         rdv_date_tv.setText("Date : " + date);
         rdv_doctor_tv.setText("Docteur : " + currentOrdinance.getDoctor().getName()+ " "
