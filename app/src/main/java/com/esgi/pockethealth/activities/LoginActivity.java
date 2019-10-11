@@ -47,7 +47,7 @@ import java.util.Map;
 
 public class LoginActivity extends BaseActivity {
 
-
+    static String IP_address = "http://192.168.1.33:5000";
     static JSONArray res = null;
     static ArrayList<Doctor> doctors = new ArrayList<Doctor>();
     static ArrayList<Vaccine> vaccines = new ArrayList<Vaccine>();
@@ -94,14 +94,14 @@ public class LoginActivity extends BaseActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://192.168.1.33:5000/connection/"+username+"/"+password, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, IP_address+"/connection/"+username+"/"+password, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
                     res = new JSONArray(response);
                     if (res != null && res .length()>0){
                         user.setId(res.getJSONObject(0).getInt("patientID"));
-                        progressDialog.setMessage("connected as "+user.getId());
+                        progressDialog.setMessage("Connection...");
                         populateUser(user.getId());
 
                         populateDoctor();
@@ -186,7 +186,7 @@ public class LoginActivity extends BaseActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://192.168.1.33:5000/patient/"+id, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, IP_address+"/patient/"+id, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 JSONObject userObj = null;
@@ -228,7 +228,7 @@ public class LoginActivity extends BaseActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                "http://192.168.1.33:5000/patient/"+user.getId()+"/heights",
+                IP_address+"/patient/"+user.getId()+"/heights",
                 new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -264,7 +264,7 @@ public class LoginActivity extends BaseActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                "http://192.168.1.33:5000/patient/"+user.getId()+"/weights",
+                IP_address+"/patient/"+user.getId()+"/weights",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -301,7 +301,7 @@ public class LoginActivity extends BaseActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                "http://192.168.1.33:5000/patient/"+user.getId()+"/appointment",
+                IP_address+"/patient/"+user.getId()+"/appointment",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -344,7 +344,7 @@ public class LoginActivity extends BaseActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                "http://192.168.1.33:5000/patient/"+user.getId()+"/recalls",
+                IP_address+"/patient/"+user.getId()+"/recalls",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -400,7 +400,7 @@ public class LoginActivity extends BaseActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                "http://192.168.1.33:5000/doctor/",
+                IP_address+"/doctor/",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -437,7 +437,7 @@ public class LoginActivity extends BaseActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                "http://192.168.1.33:5000/vaccine/",
+                IP_address+"/vaccine/",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
