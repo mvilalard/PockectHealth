@@ -44,7 +44,7 @@ import java.util.Date;
 
 public class LoginActivity extends BaseActivity {
 
-    static String IP_address = "http://192.168.1.33:5000";
+    static String IP_address = "https://yellow-fireant-34.localtunnel.me/";//"http://192.168.1.33:5000";
     static JSONArray res = null;
     static ArrayList<Doctor> doctors = new ArrayList<>();
     static ArrayList<Vaccine> vaccines = new ArrayList<>();
