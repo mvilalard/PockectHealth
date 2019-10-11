@@ -21,6 +21,8 @@ import com.esgi.pockethealth.application.RequestManager;
 import com.esgi.pockethealth.models.Appointment;
 import com.esgi.pockethealth.models.Doctor;
 import com.esgi.pockethealth.models.Height;
+import com.esgi.pockethealth.models.Medicament;
+import com.esgi.pockethealth.models.Ordinance;
 import com.esgi.pockethealth.models.Patient;
 
 import org.json.JSONArray;
@@ -49,8 +51,9 @@ public class LoginActivity extends BaseActivity {
 
     static String IP_address = "http://192.168.1.33:5000";
     static JSONArray res = null;
-    static ArrayList<Doctor> doctors = new ArrayList<Doctor>();
-    static ArrayList<Vaccine> vaccines = new ArrayList<Vaccine>();
+    static ArrayList<Doctor> doctors = new ArrayList<>();
+    static ArrayList<Vaccine> vaccines = new ArrayList<>();
+    static ArrayList<Medicament> medicaments = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -106,11 +109,11 @@ public class LoginActivity extends BaseActivity {
 
                         populateDoctor();
                         populateVaccine();
-
+                        populateMeds();
                         populateHeights();
                         populateWeights();
+                        populateDoctor();
                         populateAppointments();
-                        populateRecalls();
                         startActivity(new Intent(getApplicationContext(), MainMenuActivity.class));
 
                     }
@@ -466,4 +469,63 @@ public class LoginActivity extends BaseActivity {
         requestQueue.add(stringRequest);
     }
 
+    public void populateOrdinances(){
+        RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+        final ArrayList<Ordinance> ordinancesValues = new ArrayList<>();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                "http://192.168.1.33:5000/patient/"+user.getId()+"/prescription",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            res = new JSONArray(response);
+                            for(int i = 0; i < res.length(); i++) {
+                                JSONObject currentObj = res.getJSONObject(i);
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        requestQueue.add(stringRequest);
+    }
+
+    public void populateMeds(){
+        RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                "http://192.168.1.33:5000/medicament/",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            res = new JSONArray(response);
+                            for(int i = 0; i < res.length(); i++) {
+                                JSONObject currentObj = res.getJSONObject(i);
+                                Medicament medicament = new Medicament(
+                                        currentObj.getInt("medicamentID"),
+                                        currentObj.getString("name"));
+                                medicaments.add(medicament);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        requestQueue.add(stringRequest);
+    }
 }
