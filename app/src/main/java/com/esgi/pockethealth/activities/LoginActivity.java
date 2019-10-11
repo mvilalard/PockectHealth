@@ -33,6 +33,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.esgi.pockethealth.models.Recall;
+import com.esgi.pockethealth.models.Vaccine;
 import com.esgi.pockethealth.models.Weight;
 
 import java.text.ParseException;
@@ -48,6 +50,7 @@ public class LoginActivity extends BaseActivity {
 
     static JSONArray res = null;
     static ArrayList<Doctor> doctors = new ArrayList<Doctor>();
+    static ArrayList<Vaccine> vaccines = new ArrayList<Vaccine>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -100,11 +103,14 @@ public class LoginActivity extends BaseActivity {
                         user.setId(res.getJSONObject(0).getInt("patientID"));
                         progressDialog.setMessage("connected as "+user.getId());
                         populateUser(user.getId());
+
+                        populateDoctor();
+                        populateVaccine();
+
                         populateHeights();
                         populateWeights();
-                        populateDoctor();
-                        //Toast.makeText(getApplicationContext(),doctors.get(0).getName(),Toast.LENGTH_SHORT).show();
                         populateAppointments();
+                        populateRecalls();
                         startActivity(new Intent(getApplicationContext(), MainMenuActivity.class));
 
                     }
@@ -330,11 +336,62 @@ public class LoginActivity extends BaseActivity {
         requestQueue.add(stringRequest);
     }
 
+    public void populateRecalls()
+    {
+        final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        final ArrayList<Recall> recallValues = new ArrayList<>();
+
+        RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                "http://192.168.1.33:5000/patient/"+user.getId()+"/recalls",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            res = new JSONArray(response);
+                            for(int i = 0; i < res.length(); i++) {
+                                JSONObject currentObj = res.getJSONObject(i);
+
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                                SimpleDateFormat output = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                Date d = sdf.parse(currentObj.getString("recall_date").replace(".000Z", ""));
+                                String formattedTime = output.format(d);
+                                recallValues.add(new Recall(i,
+                                        getVaccineById(currentObj.getInt("vaccineID")),
+                                        output.parse(formattedTime)));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+                        user.setRecalls(recallValues);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        requestQueue.add(stringRequest);
+    }
+
+
     public Doctor getDoctorById(final int id)
     {
         for (Doctor doctor : doctors) {
             if (doctor.getId() == id)
                 return doctor;
+        }
+        return null;
+    }
+
+    public Vaccine getVaccineById(final int id){
+        for (Vaccine vaccine : vaccines){
+            if (vaccine.getId() == id)
+                return vaccine;
         }
         return null;
     }
@@ -361,6 +418,39 @@ public class LoginActivity extends BaseActivity {
                                 doc.setNumber_rpps(currentObj.getString("number_rpps"));
 
                                 doctors.add(doc);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        requestQueue.add(stringRequest);
+    }
+
+    public void populateVaccine(){
+        RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                "http://192.168.1.33:5000/vaccine/",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            res = new JSONArray(response);
+                            for(int i = 0; i < res.length(); i++) {
+                                JSONObject currentObj = res.getJSONObject(i);
+                                Vaccine vac = new Vaccine(
+                                        currentObj.getInt("vaccineID"),
+                                        currentObj.getString("name"),
+                                        currentObj.getString("recommandation"),
+                                        currentObj.getInt("validity"));
+                                vaccines.add(vac);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

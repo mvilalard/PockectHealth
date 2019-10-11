@@ -176,10 +176,10 @@ public class MainMenuActivity extends BaseActivity {
             ordinances.add(new Ordinance(0, doctor1, new Date(), prescriptions1));
             ordinances.add(new Ordinance(1, doctor2, new Date(), prescriptions2));
 
-            List<Recall> recalls = new ArrayList<>();
+            /*List<Recall> recalls = new ArrayList<>();
             recalls.add(new Recall(0, vaccin1, new Date()));
             recalls.add(new Recall(1, vaccin2, new Date()));
-            recalls.add(new Recall(2, vaccin3, new Date()));
+            recalls.add(new Recall(2, vaccin3, new Date()));*/
 
             UserAccount keep = new UserAccount(0, "dopidot", "1234",
                     "dopidot@youtube.com");
@@ -193,7 +193,7 @@ public class MainMenuActivity extends BaseActivity {
             //user.setWeights(weights);
             //user.setAppointments(appointments);
             user.setOrdinances(ordinances);
-            user.setRecalls(recalls);
+            //user.setRecalls(recalls);
 
         } catch (ParseException e) {
             e.printStackTrace();
