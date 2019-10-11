@@ -307,7 +307,6 @@ public class LoginActivity extends BaseActivity {
                                         currentObj.getInt("duration")));
                                 doctorIds.add(currentObj.getInt("doctorID"));
                             }
-                            user.setAppointments(appointmentsValues);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         } catch (ParseException e) {
@@ -328,6 +327,8 @@ public class LoginActivity extends BaseActivity {
             Appointment currentObj = appointmentsValues.get(i);
             currentObj.setDoctor(getDoctorById(doctorIds.get(i)));
         }
+
+        user.setAppointments(appointmentsValues);
     }
 
     public Doctor getDoctorById(final int id)
