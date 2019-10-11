@@ -71,7 +71,7 @@ public class NotificationService extends Service {
         timer = new Timer() ;
         initializeTimerTask() ;
         appointment = user.getClosestAppointment();
-        timer .schedule( timerTask, appointment.getCreation_date()) ; //
+        timer .schedule( timerTask, appointment.getCreation_date()) ;
     }
 
     public void stopTimerTask () {

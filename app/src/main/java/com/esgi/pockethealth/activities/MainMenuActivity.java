@@ -46,7 +46,7 @@ public class MainMenuActivity extends BaseActivity {
         Intent serviceIntent = new Intent( this, NotificationService.class );
         serviceIntent.putExtra("user", this.user);
 
-        startService(serviceIntent) ;
+        //startService(serviceIntent) ;
 
 
         final ImageButton rendezVousButton = (ImageButton) findViewById(R.id.rendez_vous_button);
@@ -191,7 +191,7 @@ public class MainMenuActivity extends BaseActivity {
                     weights, heights, recalls, appointments, ordinances);*/
             //user.setHeights(heights);
             //user.setWeights(weights);
-            user.setAppointments(appointments);
+            //user.setAppointments(appointments);
             user.setOrdinances(ordinances);
             user.setRecalls(recalls);
 

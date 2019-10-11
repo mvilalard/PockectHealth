@@ -103,8 +103,8 @@ public class LoginActivity extends BaseActivity {
                         populateHeights();
                         populateWeights();
                         populateDoctor();
-                        Toast.makeText(getApplicationContext(),doctors.get(0).getName(),Toast.LENGTH_SHORT).show();
-                        //populateAppointments();
+                        //Toast.makeText(getApplicationContext(),doctors.get(0).getName(),Toast.LENGTH_SHORT).show();
+                        populateAppointments();
                         startActivity(new Intent(getApplicationContext(), MainMenuActivity.class));
 
                     }
@@ -295,7 +295,7 @@ public class LoginActivity extends BaseActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                "http://192.168.1.33:5000/patient/%22+user.getId()+%22/appointment",
+                "http://192.168.1.33:5000/patient/"+user.getId()+"/appointment",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
