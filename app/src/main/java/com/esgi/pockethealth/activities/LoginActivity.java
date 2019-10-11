@@ -287,7 +287,7 @@ public class LoginActivity extends BaseActivity {
 
     public void populateAppointments()
     {
-        final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         final ArrayList<Appointment> appointmentsValues = new ArrayList<>();
         final ArrayList<Integer> doctorIds = new ArrayList<>();
 
@@ -305,7 +305,7 @@ public class LoginActivity extends BaseActivity {
 
                                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
                                 SimpleDateFormat output = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                                Date d = sdf.parse(currentObj.getString("date"));
+                                Date d = sdf.parse(currentObj.getString("date").replace(".000Z", ""));
                                 String formattedTime = output.format(d);
 
 
@@ -320,7 +320,12 @@ public class LoginActivity extends BaseActivity {
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
+                        for(int i = 0; i < appointmentsValues.size(); i++) {
+                            Appointment currentObj = appointmentsValues.get(i);
+                            currentObj.setDoctor(getDoctorById(doctorIds.get(i)));
+                        }
 
+                        user.setAppointments(appointmentsValues);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -329,15 +334,6 @@ public class LoginActivity extends BaseActivity {
             }
         });
         requestQueue.add(stringRequest);
-
-
-        for(int i = 0; i < appointmentsValues.size(); i++) {
-            Appointment currentObj = appointmentsValues.get(i);
-            currentObj.setDoctor(getDoctorById(doctorIds.get(i)));
-            Toast.makeText(getApplicationContext(),currentObj.getCreation_date().toString(),Toast.LENGTH_SHORT).show();
-        }
-
-        user.setAppointments(appointmentsValues);
     }
 
     public Doctor getDoctorById(final int id)
