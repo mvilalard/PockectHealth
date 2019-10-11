@@ -192,7 +192,7 @@ public class LoginActivity extends BaseActivity {
                     if (userObj.getString("organ_donor") == "Y") user.setOrgan_donor(true);
                     else user.setOrgan_donor(false);
 
-                    Toast.makeText(getApplicationContext(),user.getBirthday().toString(),Toast.LENGTH_SHORT).show();
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 } catch (ParseException e) {
@@ -264,7 +264,7 @@ public class LoginActivity extends BaseActivity {
                             res = new JSONArray(response);
                             for(int i = 0; i < res.length(); i++) {
                                 JSONObject currentObj = res.getJSONObject(i);
-                                weightsValues.add(new Weight(i, currentObj.getLong("weights"),
+                                weightsValues.add(new Weight(i, currentObj.getLong("weight"),
                                         format.parse(currentObj.getString("date"))));
                             }
                             user.setWeights(weightsValues);
@@ -345,6 +345,7 @@ public class LoginActivity extends BaseActivity {
                             toReturn.setTelephone(doctorObj.getString("telephone"));
                             toReturn.setSpeciality(doctorObj.getString("speciality"));
                             toReturn.setNumber_rpps(doctorObj.getString("number_rpps"));
+                            Toast.makeText(getApplicationContext(),toReturn.getSpeciality(),Toast.LENGTH_SHORT).show();
 
                         } catch (JSONException e) {
                             e.printStackTrace();

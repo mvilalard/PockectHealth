@@ -85,8 +85,8 @@ public class GraphActivity extends BaseActivity {
             heightGraph.getViewport().setMaxY(getMaxHeight(user.getHeights()));
 
             //Get series
-            weightGraph.addSeries(getSerieFromList(user.getHeights()));
-            heightGraph.addSeries(getSerieFromList(user.getWeights()));
+            weightGraph.addSeries(getSerieFromList(user.getWeights()));
+            heightGraph.addSeries(getSerieFromList(user.getHeights()));
 
         }
         catch (IllegalArgumentException e) {

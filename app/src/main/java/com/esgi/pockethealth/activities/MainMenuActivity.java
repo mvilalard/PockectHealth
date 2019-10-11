@@ -189,7 +189,8 @@ public class MainMenuActivity extends BaseActivity {
                     format.parse("1996-12-01"), "O+",
                     "1234567891234", true,
                     weights, heights, recalls, appointments, ordinances);*/
-            user.setWeights(weights);
+            //user.setHeights(heights);
+            //user.setWeights(weights);
             user.setAppointments(appointments);
             user.setOrdinances(ordinances);
             user.setRecalls(recalls);
