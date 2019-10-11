@@ -102,6 +102,7 @@ public class LoginActivity extends BaseActivity {
                         populateUser(user.getId());
                         populateHeights();
                         populateWeights();
+                        populateDoctor();
                         populateAppointments();
                         startActivity(new Intent(getApplicationContext(), MainMenuActivity.class));
 
@@ -289,7 +290,6 @@ public class LoginActivity extends BaseActivity {
     {
         final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         final ArrayList<Appointment> appointmentsValues = new ArrayList<>();
-        final ArrayList<Integer> doctorIds = new ArrayList<>();
 
         RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
 
@@ -308,19 +308,14 @@ public class LoginActivity extends BaseActivity {
                                 Date d = sdf.parse(currentObj.getString("date").replace(".000Z", ""));
                                 String formattedTime = output.format(d);
                                 appointmentsValues.add(new Appointment(i,
-                                        null,
+                                        getDoctorById(currentObj.getInt("doctorID")),
                                         output.parse(formattedTime),
                                         currentObj.getInt("duration")));
-                                doctorIds.add(currentObj.getInt("doctorID"));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         } catch (ParseException e) {
                             e.printStackTrace();
-                        }
-                        for(int i = 0; i < appointmentsValues.size(); i++) {
-                            Appointment currentObj = appointmentsValues.get(i);
-                            currentObj.setDoctor(getDoctorById(doctorIds.get(i)));
                         }
 
                         user.setAppointments(appointmentsValues);
@@ -336,40 +331,11 @@ public class LoginActivity extends BaseActivity {
 
     public Doctor getDoctorById(final int id)
     {
-        final Doctor toReturn = new Doctor();
-        final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-
-        RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
-
-        StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                "http://192.168.1.33:5000/doctor/"+id,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        JSONObject doctorObj = null;
-                        try {
-                            res = new JSONArray(response);
-                            doctorObj = res.getJSONObject(0);
-                            toReturn.setId(id);
-                            toReturn.setName(doctorObj.getString("name"));
-                            toReturn.setForename(doctorObj.getString("forename"));
-                            toReturn.setAddress(doctorObj.getString("address"));
-                            toReturn.setTelephone(doctorObj.getString("telephone"));
-                            toReturn.setSpeciality(doctorObj.getString("speciality"));
-                            toReturn.setNumber_rpps(doctorObj.getString("number_rpps"));
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-        requestQueue.add(stringRequest);
-        return toReturn;
+        for (Doctor doctor : doctors) {
+            if (doctor.getId() == id)
+                return doctor;
+        }
+        return null;
     }
 
     public void populateDoctor(){
