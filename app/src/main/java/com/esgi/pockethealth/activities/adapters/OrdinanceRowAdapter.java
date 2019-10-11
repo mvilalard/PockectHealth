@@ -13,6 +13,8 @@ import com.esgi.pockethealth.models.Ordinance;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class OrdinanceRowAdapter extends BaseAdapter {
@@ -50,11 +52,14 @@ public class OrdinanceRowAdapter extends BaseAdapter {
 
 
         String date = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(currentOrdinance.getDate_creation());
+        Date creationDate = currentOrdinance.getDate_creation();// the date instance
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(creationDate);
 
         rdv_date_tv.setText("Date : " + date);
         rdv_doctor_tv.setText("Docteur : " + currentOrdinance.getDoctor().getName()+ " "
                 + currentOrdinance.getDoctor().getForename());
-        rdv_icon_tv.setText(currentOrdinance.getDate_creation().getDay() + "/"+currentOrdinance.getDate_creation().getMonth());
+        rdv_icon_tv.setText(calendar.get(Calendar.DAY_OF_MONTH) + "/"+calendar.get(Calendar.MONTH) );
 
         return (row);
     }
