@@ -287,6 +287,8 @@ public class LoginActivity extends BaseActivity {
     public void populateAppointments()
     {
         final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        final ArrayList<Appointment> appointmentsValues = new ArrayList<>();
+        final ArrayList<Integer> doctorIds = new ArrayList<>();
 
         RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
 
@@ -296,14 +298,14 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            ArrayList<Appointment> appointmentsValues = new ArrayList<>();
                             res = new JSONArray(response);
                             for(int i = 0; i < res.length(); i++) {
                                 JSONObject currentObj = res.getJSONObject(i);
                                 appointmentsValues.add(new Appointment(i,
-                                        getDoctorById(currentObj.getInt("doctorID")),
+                                        null,
                                         format.parse(currentObj.getString("date")),
                                         currentObj.getInt("duration")));
+                                doctorIds.add(currentObj.getInt("doctorID"));
                             }
                             user.setAppointments(appointmentsValues);
                         } catch (JSONException e) {
@@ -320,6 +322,12 @@ public class LoginActivity extends BaseActivity {
             }
         });
         requestQueue.add(stringRequest);
+
+
+        for(int i = 0; i < appointmentsValues.size(); i++) {
+            Appointment currentObj = appointmentsValues.get(i);
+            currentObj.setDoctor(getDoctorById(doctorIds.get(i)));
+        }
     }
 
     public Doctor getDoctorById(final int id)
