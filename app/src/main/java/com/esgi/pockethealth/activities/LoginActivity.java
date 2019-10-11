@@ -7,17 +7,13 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.util.JsonReader;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.esgi.pockethealth.R;
 import com.esgi.pockethealth.application.BaseActivity;
 import com.esgi.pockethealth.application.IData;
-import com.esgi.pockethealth.application.RequestManager;
 import com.esgi.pockethealth.models.Appointment;
 import com.esgi.pockethealth.models.Doctor;
 import com.esgi.pockethealth.models.Height;
@@ -35,6 +31,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.esgi.pockethealth.models.Prescription;
 import com.esgi.pockethealth.models.Recall;
 import com.esgi.pockethealth.models.Vaccine;
 import com.esgi.pockethealth.models.Weight;
@@ -43,8 +40,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class LoginActivity extends BaseActivity {
@@ -54,6 +49,8 @@ public class LoginActivity extends BaseActivity {
     static ArrayList<Doctor> doctors = new ArrayList<>();
     static ArrayList<Vaccine> vaccines = new ArrayList<>();
     static ArrayList<Medicament> medicaments = new ArrayList<>();
+    static ArrayList<Prescription> prescriptions = new ArrayList<>();
+    static ArrayList<Ordinance> ordinances = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -114,6 +111,8 @@ public class LoginActivity extends BaseActivity {
                         populateWeights();
                         populateDoctor();
                         populateAppointments();
+                        populateOrdinances();
+                        populateRecalls();
                         startActivity(new Intent(getApplicationContext(), MainMenuActivity.class));
 
                     }
@@ -471,10 +470,9 @@ public class LoginActivity extends BaseActivity {
 
     public void populateOrdinances(){
         RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
-        final ArrayList<Ordinance> ordinancesValues = new ArrayList<>();
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                "http://192.168.1.33:5000/patient/"+user.getId()+"/prescription",
+                IP_address+"/patient/"+user.getId()+"/ordinance",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -483,8 +481,22 @@ public class LoginActivity extends BaseActivity {
                             for(int i = 0; i < res.length(); i++) {
                                 JSONObject currentObj = res.getJSONObject(i);
 
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                                SimpleDateFormat output = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                Date d = sdf.parse(currentObj.getString("date").replace(".000Z", ""));
+                                String formattedTime = output.format(d);
+
+                                ordinances.add(new Ordinance(
+                                        currentObj.getInt("ordinanceID"),
+                                        getDoctorById(currentObj.getInt("doctorID")),
+                                        output.parse(formattedTime),
+                                        getPrescriptionForOrdinance(currentObj.getInt("ordinanceID"))
+                                ));
                             }
+                            user.setOrdinances(ordinances);
                         } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (ParseException e) {
                             e.printStackTrace();
                         }
 
@@ -502,7 +514,7 @@ public class LoginActivity extends BaseActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                "http://192.168.1.33:5000/medicament/",
+                IP_address+"/medicament/",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -527,5 +539,93 @@ public class LoginActivity extends BaseActivity {
             }
         });
         requestQueue.add(stringRequest);
+    }
+
+
+
+    public Medicament getMedicamentById(final int id){
+        for (Medicament medicament : medicaments){
+            if (medicament.getId() == id)
+                return medicament;
+        }
+        return null;
+    }
+
+
+    public void populatePrescription(){
+        RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                IP_address+"patient/"+user.getId()+"/prescription",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            res = new JSONArray(response);
+                            for(int i = 0; i < res.length(); i++) {
+                                JSONObject currentObj = res.getJSONObject(i);
+                                Prescription prescription = new Prescription(
+                                        currentObj.getInt("prescriptionID"),
+                                        currentObj.isNull("vaccineID") ?
+                                            getMedicamentById(currentObj.getInt("medicamentID")):
+                                            getMedicamentById(currentObj.getInt("vaccineID")),
+                                        currentObj.getLong("posologie"));
+                                prescriptions.add(prescription);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        requestQueue.add(stringRequest);
+    }
+
+    public ArrayList<Prescription> getPrescriptionForOrdinance(final int ordinanceID){
+        RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
+        final ArrayList<Prescription> toReturn = new ArrayList();
+        StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                IP_address+"/prescription/"+ordinanceID,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            res = new JSONArray(response);
+                            for(int i = 0; i < res.length(); i++) {
+                                JSONObject currentObj = res.getJSONObject(i);
+                                Prescription prescription = new Prescription(
+                                        currentObj.getInt("prescriptionID"),
+                                        currentObj.isNull("vaccineID") ?
+                                                getMedicamentById(currentObj.getInt("medicamentID")):
+                                                getMedicamentById(currentObj.getInt("vaccineID")),
+                                        currentObj.getLong("posologie"));
+                                toReturn.add(prescription);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        requestQueue.add(stringRequest);
+        return toReturn;
+    }
+
+    public Prescription getPrescriptionById(final int id){
+        for (Prescription prescription : prescriptions){
+            if (prescription.getId() == id)
+                return prescription;
+        }
+        return null;
     }
 }

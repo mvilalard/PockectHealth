@@ -43,7 +43,7 @@ public class OrdinanceRowAdapter extends BaseAdapter {
         LayoutInflater inflater = LayoutInflater.from(mContext);
         Ordinance currentOrdinance = (Ordinance) getItem(position);
         View row;
-        row = inflater.inflate(R.layout.rendez_vous_row, parent, false);
+        row = inflater.inflate(R.layout.ordinance_row, parent, false);
         TextView rdv_icon_tv = row.findViewById(R.id.mark);
         TextView rdv_date_tv = row.findViewById(R.id.rdv_top);
         TextView rdv_doctor_tv = row.findViewById(R.id.rdv_bottom);
