@@ -44,7 +44,7 @@ import java.util.Date;
 
 public class LoginActivity extends BaseActivity {
 
-    static String IP_address = "https://wise-fox-41.localtunnel.me";
+    static String IP_address = "https://1d88d002.ngrok.io";
     static JSONArray res = null;
     static ArrayList<Doctor> doctors = new ArrayList<>();
     static ArrayList<Vaccine> vaccines = new ArrayList<>();
@@ -113,11 +113,12 @@ public class LoginActivity extends BaseActivity {
                         populateAppointments();
                         populateOrdinances();
                         populateRecalls();
-                        while(user.getRecalls().isEmpty());
                         startActivity(new Intent(getApplicationContext(), MainMenuActivity.class));
 
                     }
                 } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (ParseException e) {
                     e.printStackTrace();
                 }
             }
@@ -589,7 +590,7 @@ public class LoginActivity extends BaseActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
         final ArrayList<Prescription> toReturn = new ArrayList();
         StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                IP_address+"/prescription/"+ordinanceID,
+                IP_address+"/ordinance/"+ordinanceID+"/prescription",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
