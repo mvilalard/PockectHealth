@@ -102,32 +102,18 @@ public class LoginActivity extends BaseActivity {
                     if (res != null && res .length()>0){
                         user.setId(res.getJSONObject(0).getInt("patientID"));
                         progressDialog.setMessage("Connection...");
-                        Thread thread = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
+                        populateUser(user.getId());
 
-                                try {
-                                    populateUser(user.getId());
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
-                                }
-
-                                populateDoctor();
-                                populateVaccine();
-                                populateMeds();
-                                populateHeights();
-                                populateWeights();
-                                populateDoctor();
-                                populateAppointments();
-                                populateOrdinances();
-                                populateRecalls();
-                            }
-                        });
-                        thread.run();
-
-                        while(thread.isAlive());
+                        populateDoctor();
+                        populateVaccine();
+                        populateMeds();
+                        populateHeights();
+                        populateWeights();
+                        populateDoctor();
+                        populateAppointments();
+                        populateOrdinances();
+                        populateRecalls();
+                        while(user.getRecalls().isEmpty());
                         startActivity(new Intent(getApplicationContext(), MainMenuActivity.class));
 
                     }

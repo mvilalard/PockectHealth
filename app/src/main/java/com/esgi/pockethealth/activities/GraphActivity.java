@@ -97,6 +97,9 @@ public class GraphActivity extends BaseActivity {
     private LineGraphSeries<DataPoint> getSerieFromList(List<IData> list){
         DataPoint[] data = new DataPoint[list.size()];
         int minYear = getMinYear(list);
+
+        if (list.isEmpty())
+            return new LineGraphSeries<>();
         for (int i=0; i<list.size(); i++){
             IData w = list.get(i);
             data[i] = new DataPoint(w.getDate().getYear()-minYear, w.getData());
