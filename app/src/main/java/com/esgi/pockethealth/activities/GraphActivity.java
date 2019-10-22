@@ -11,7 +11,6 @@ import android.widget.Toast;
 import com.esgi.pockethealth.R;
 import com.esgi.pockethealth.application.BaseActivity;
 import com.esgi.pockethealth.application.IData;
-import com.esgi.pockethealth.application.RequestManager;
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
@@ -66,15 +65,6 @@ public class GraphActivity extends BaseActivity {
         try {
 
             final JSONObject[] response = {new JSONObject()};
-            Thread postTask = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    String url = "/android/get/height/";
-                    RequestManager.executeHttpsRequest(RequestManager.RequestType.GET, url, null);
-                }
-            });
-            postTask.start();
-            while (postTask.isAlive());
 
             System.out.println(response);
 

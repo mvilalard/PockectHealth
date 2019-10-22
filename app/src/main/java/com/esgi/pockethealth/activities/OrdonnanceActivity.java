@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -12,31 +11,15 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.esgi.pockethealth.R;
 import com.esgi.pockethealth.activities.adapters.OrdinanceRowAdapter;
 import com.esgi.pockethealth.activities.adapters.PrescriptionRowAdapter;
 import com.esgi.pockethealth.application.BaseActivity;
-import com.esgi.pockethealth.application.RequestManager;
-import com.esgi.pockethealth.models.Doctor;
-import com.esgi.pockethealth.models.Medicament;
 import com.esgi.pockethealth.models.Ordinance;
-import com.esgi.pockethealth.models.Patient;
-import com.esgi.pockethealth.models.Prescription;
-import com.esgi.pockethealth.models.UserAccount;
-import com.esgi.pockethealth.models.Vaccine;
-
-import org.json.JSONObject;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public class OrdonnanceActivity extends BaseActivity {
 

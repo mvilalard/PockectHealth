@@ -10,7 +10,6 @@ import android.widget.ListView;
 import com.esgi.pockethealth.R;
 import com.esgi.pockethealth.activities.adapters.RendezVousRowAdapter;
 import com.esgi.pockethealth.application.BaseActivity;
-import com.esgi.pockethealth.application.RequestManager;
 
 import org.json.JSONObject;
 
@@ -34,20 +33,6 @@ public class RendezVousActivity extends BaseActivity {
             window.setStatusBarColor(ContextCompat.getColor(this,
                     R.color.rendez_vous_main_color_dark));
         }
-
-
-        final JSONObject[] response = {new JSONObject()};
-        Thread postTask = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                String url = "/patient/appointement/get";
-                RequestManager.executeHttpsRequest(RequestManager.RequestType.GET, url, null);
-            }
-        });
-        postTask.start();
-        while (postTask.isAlive());
-
-        System.out.println(response);
 
 
         RendezVousRowAdapter adapter = new RendezVousRowAdapter(this, user.getAppointments());
