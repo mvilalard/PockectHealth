@@ -44,7 +44,7 @@ import java.util.Date;
 
 public class LoginActivity extends BaseActivity {
 
-    static String IP_address = "http://192.168.1.33:5000";
+    static String IP_address = "https://wise-fox-41.localtunnel.me";
     static JSONArray res = null;
     static ArrayList<Doctor> doctors = new ArrayList<>();
     static ArrayList<Vaccine> vaccines = new ArrayList<>();
@@ -102,23 +102,36 @@ public class LoginActivity extends BaseActivity {
                     if (res != null && res .length()>0){
                         user.setId(res.getJSONObject(0).getInt("patientID"));
                         progressDialog.setMessage("Connection...");
-                        populateUser(user.getId());
+                        Thread thread = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
 
-                        populateDoctor();
-                        populateVaccine();
-                        populateMeds();
-                        populateHeights();
-                        populateWeights();
-                        populateDoctor();
-                        populateAppointments();
-                        populateOrdinances();
-                        populateRecalls();
+                                try {
+                                    populateUser(user.getId());
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+
+                                populateDoctor();
+                                populateVaccine();
+                                populateMeds();
+                                populateHeights();
+                                populateWeights();
+                                populateDoctor();
+                                populateAppointments();
+                                populateOrdinances();
+                                populateRecalls();
+                            }
+                        });
+                        thread.run();
+
+                        while(thread.isAlive());
                         startActivity(new Intent(getApplicationContext(), MainMenuActivity.class));
 
                     }
                 } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (ParseException e) {
                     e.printStackTrace();
                 }
             }
