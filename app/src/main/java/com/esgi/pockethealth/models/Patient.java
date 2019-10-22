@@ -23,6 +23,8 @@ public class Patient implements Serializable {
     private List<Appointment> appointments;
     private List<Ordinance> ordinances;
 
+    private boolean populated = false;
+
     public Patient(int id, String name, String forename, Date birthday,
                    String blood_group, String social_security_number, boolean organ_donor,
                    List<IData> weights, List<IData> heights, List<Recall> recalls,
@@ -165,5 +167,9 @@ public class Patient implements Serializable {
         }
 
         return null;
+    }
+
+    public boolean isPopulated() {
+        return populated;
     }
 }

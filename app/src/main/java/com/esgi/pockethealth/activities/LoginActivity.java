@@ -590,7 +590,7 @@ public class LoginActivity extends BaseActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
         final ArrayList<Prescription> toReturn = new ArrayList();
         StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                IP_address+"/prescription/"+ordinanceID,
+                IP_address+"/ordinance/"+ordinanceID+"/prescription",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
