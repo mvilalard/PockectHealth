@@ -40,7 +40,7 @@ public class NotificationService extends Service {
         Bundle bundle = intent.getExtras();
         this.user = (Patient) bundle.getSerializable("user");
 
-        startTimer() ;
+        startTimer();
         return START_STICKY ;
     }
 

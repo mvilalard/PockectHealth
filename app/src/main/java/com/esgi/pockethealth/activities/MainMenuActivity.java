@@ -11,27 +11,7 @@ import android.widget.ImageButton;
 
 import com.esgi.pockethealth.R;
 import com.esgi.pockethealth.application.BaseActivity;
-import com.esgi.pockethealth.application.IData;
 import com.esgi.pockethealth.application.NotificationService;
-import com.esgi.pockethealth.models.Appointment;
-import com.esgi.pockethealth.models.Doctor;
-import com.esgi.pockethealth.models.Height;
-import com.esgi.pockethealth.models.Medicament;
-import com.esgi.pockethealth.models.Ordinance;
-import com.esgi.pockethealth.models.Patient;
-import com.esgi.pockethealth.models.Prescription;
-import com.esgi.pockethealth.models.Recall;
-import com.esgi.pockethealth.models.UserAccount;
-import com.esgi.pockethealth.models.Vaccine;
-import com.esgi.pockethealth.models.Weight;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import java.lang.Object;
 
 public class MainMenuActivity extends BaseActivity {
 
@@ -46,7 +26,7 @@ public class MainMenuActivity extends BaseActivity {
         Intent serviceIntent = new Intent( this, NotificationService.class );
         serviceIntent.putExtra("user", this.user);
 
-        //startService(serviceIntent) ;
+        startService(serviceIntent) ;
 
 
         final ImageButton rendezVousButton = (ImageButton) findViewById(R.id.rendez_vous_button);

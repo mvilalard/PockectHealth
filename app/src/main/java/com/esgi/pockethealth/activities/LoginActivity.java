@@ -52,6 +52,9 @@ public class LoginActivity extends BaseActivity {
     static ArrayList<Prescription> prescriptions = new ArrayList<>();
     static ArrayList<Ordinance> ordinances = new ArrayList<>();
 
+    static int completedTask = 0;
+    static int totalCompletedTask = 10;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,8 +105,9 @@ public class LoginActivity extends BaseActivity {
                     if (res != null && res .length()>0){
                         user.setId(res.getJSONObject(0).getInt("patientID"));
                         progressDialog.setMessage("Connection...");
-                        populateUser(user.getId());
 
+                        completedTask = 0;
+                        populateUser(user.getId());
                         populateDoctor();
                         populateVaccine();
                         populateMeds();
@@ -113,7 +117,6 @@ public class LoginActivity extends BaseActivity {
                         populateAppointments();
                         populateOrdinances();
                         populateRecalls();
-                        startActivity(new Intent(getApplicationContext(), MainMenuActivity.class));
 
                     }
                 } catch (JSONException e) {
@@ -153,29 +156,6 @@ public class LoginActivity extends BaseActivity {
 
     }
 
-    public void getResponse(final String url){
-
-        RequestQueue ExampleRequestQueue = Volley.newRequestQueue(LoginActivity.this);
-
-        StringRequest ExampleStringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    res = new JSONArray(response);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-
-        ExampleRequestQueue.add(ExampleStringRequest);
-    }
-
     @Override
     public void onBackPressed() {
         // disable going back to the MainActivity
@@ -202,6 +182,7 @@ public class LoginActivity extends BaseActivity {
                     user.setBirthday(format.parse(userObj.getString("birthdate")));
                     if (userObj.getString("organ_donor") == "Y") user.setOrgan_donor(true);
                     else user.setOrgan_donor(false);
+                    completeTask();
 
 
                 } catch (JSONException e) {
@@ -248,6 +229,7 @@ public class LoginActivity extends BaseActivity {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+                completeTask();
 
             }
         }, new Response.ErrorListener() {
@@ -284,6 +266,7 @@ public class LoginActivity extends BaseActivity {
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
+                        completeTask();
 
                     }
                 }, new Response.ErrorListener() {
@@ -328,6 +311,7 @@ public class LoginActivity extends BaseActivity {
                         }
 
                         user.setAppointments(appointmentsValues);
+                        completeTask();
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -370,6 +354,7 @@ public class LoginActivity extends BaseActivity {
                         }
 
                         user.setRecalls(recallValues);
+                        completeTask();
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -424,6 +409,7 @@ public class LoginActivity extends BaseActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                        completeTask();
 
                     }
                 }, new Response.ErrorListener() {
@@ -457,6 +443,7 @@ public class LoginActivity extends BaseActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                        completeTask();
 
                     }
                 }, new Response.ErrorListener() {
@@ -499,6 +486,7 @@ public class LoginActivity extends BaseActivity {
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
+                        completeTask();
 
                     }
                 }, new Response.ErrorListener() {
@@ -530,6 +518,7 @@ public class LoginActivity extends BaseActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                        completeTask();
 
                     }
                 }, new Response.ErrorListener() {
@@ -551,40 +540,6 @@ public class LoginActivity extends BaseActivity {
         return null;
     }
 
-
-    public void populatePrescription(){
-        RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
-
-        StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                IP_address+"patient/"+user.getId()+"/prescription",
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            res = new JSONArray(response);
-                            for(int i = 0; i < res.length(); i++) {
-                                JSONObject currentObj = res.getJSONObject(i);
-                                Prescription prescription = new Prescription(
-                                        currentObj.getInt("prescriptionID"),
-                                        currentObj.isNull("vaccineID") ?
-                                            getMedicamentById(currentObj.getInt("medicamentID")):
-                                            getMedicamentById(currentObj.getInt("vaccineID")),
-                                        currentObj.getLong("posologie"));
-                                prescriptions.add(prescription);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-        requestQueue.add(stringRequest);
-    }
 
     public ArrayList<Prescription> getPrescriptionForOrdinance(final int ordinanceID){
         RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
@@ -621,11 +576,13 @@ public class LoginActivity extends BaseActivity {
         return toReturn;
     }
 
-    public Prescription getPrescriptionById(final int id){
-        for (Prescription prescription : prescriptions){
-            if (prescription.getId() == id)
-                return prescription;
+
+    public void completeTask(){
+        completedTask++;
+        System.out.println("Count : "+completedTask);
+        if (completedTask == totalCompletedTask){
+            System.out.println("FINISHED :D");
+            startActivity(new Intent(getApplicationContext(), MainMenuActivity.class));
         }
-        return null;
     }
 }
