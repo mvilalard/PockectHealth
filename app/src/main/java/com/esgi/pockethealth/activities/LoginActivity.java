@@ -106,7 +106,7 @@ public class LoginActivity extends BaseActivity {
                         user.setId(res.getJSONObject(0).getInt("patientID"));
                         progressDialog.setMessage("Connection...");
 
-                        completedTask = 0;
+                        reset();
                         populateUser(user.getId());
                         populateDoctor();
                         populateVaccine();
@@ -584,5 +584,15 @@ public class LoginActivity extends BaseActivity {
             System.out.println("FINISHED :D");
             startActivity(new Intent(getApplicationContext(), MainMenuActivity.class));
         }
+    }
+
+    public void reset(){
+        doctors = new ArrayList<>();
+        vaccines = new ArrayList<>();
+        medicaments = new ArrayList<>();
+        prescriptions = new ArrayList<>();
+        ordinances = new ArrayList<>();
+
+        completedTask = 0;
     }
 }

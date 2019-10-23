@@ -23,7 +23,6 @@ public class Patient implements Serializable {
     private List<Appointment> appointments;
     private List<Ordinance> ordinances;
 
-    private boolean populated = false;
 
     public Patient(int id, String name, String forename, Date birthday,
                    String blood_group, String social_security_number, boolean organ_donor,
@@ -148,8 +147,12 @@ public class Patient implements Serializable {
 
         List<Date> dates = new ArrayList<Date>();
 
+        Date today = new Date(now);
         for (int i = 0; i < appointments.size(); i++) {
-            dates.add(appointments.get(i).getCreation_date());
+            Date current = appointments.get(i).getCreation_date();
+            int comparisaon = current.compareTo(today);
+            if(current.compareTo(today) >= 0)
+                dates.add(appointments.get(i).getCreation_date());
         }
 
         Date closest = Collections.min(dates, new Comparator<Date>() {
@@ -169,7 +172,4 @@ public class Patient implements Serializable {
         return null;
     }
 
-    public boolean isPopulated() {
-        return populated;
-    }
 }
